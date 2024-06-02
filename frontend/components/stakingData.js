@@ -5,7 +5,7 @@ export default function StakingData() {
         <section className={styles.stakingDataContainer}>
             <section className={styles.stakingData}>
                 <span>Total Staked Tokens</span>
-                    <span className={styles.stakingData_value}>R,237,907</span>
+                    <span className={styles.stakingData_value}>R1,237,907</span>
             </section>
             <section className={styles.stakingData}>
                 <span>Total Renewal Paid</span>

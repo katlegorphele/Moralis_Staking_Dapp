@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Beans } from "@web3uikit/icons";
+import { NftCat, MetamaskLined } from "@web3uikit/icons";
+
 import styles from "../styles/Home.module.css";
 import Web3 from 'web3';
 
@@ -39,8 +40,8 @@ export default function Header() {
   return (
     <section className={styles.header}>
       <section className={styles.header_logoSection}>
-        <h1 className={styles.title}>Beans Staking </h1>
-        <Beans fontSize="20px" className={styles.beans} />
+      <NftCat fontSize="40px" className={styles.beans} color="white" />
+        <h1 className={styles.title}>KRP STACKING </h1>
       </section>
       <section className={styles.header_btn}>
         {!isLoggedIn ? (
@@ -52,7 +53,7 @@ export default function Header() {
             onClick={connectWallet}
             className={styles.connectBtn}
           >
-            CONNECT WALLET
+            <MetamaskLined fontSize='20px'color="white" className="{styles.header_btn_icon}"/>  CONNECT WALLET
           </button>
         )}
       </section>

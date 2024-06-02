@@ -19,11 +19,11 @@
   height: 3.5rem;
   background-image: linear-gradient(
     to left,
-    rgba(255, 255, 255, 0),
+    rgba(252, 252, 252, 0),
     rgb(0, 0, 0)
   );
   color: rgb(25, 15, 15);
-  padding: 0 5rem;
+  padding: 0 2rem;
 }
 
 .header_logoSection {
@@ -32,8 +32,17 @@
 }
 
 .header_btn {
-  width: 10rem;
+  width: 11rem;
   height: 2.5rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.header_btn_icon {
+  margin-right: 2;
 }
 
 .title {
@@ -63,7 +72,7 @@
   bottom: 20px;
   width: 70%;
   height: 3rem;
-  background-color: #48a0f8;
+  background-color: #000000;
   border-radius: 0.3rem;
   border: none;
   outline: none;
@@ -118,7 +127,7 @@
 } */
 
 .stakingType {
-  background-color: rgb(238, 174, 202);
+  background-color: rgb(12, 162, 57);
   transition: all 150ms ease-in-out;
 }
 
@@ -178,9 +187,9 @@
   color: transparent;
   background: linear-gradient(
     225deg,
-    rgb(72, 160, 248) 0%,
-    rgb(72, 160, 248) 13.8%,
-    rgb(230, 73, 255) 88.28%
+    rgb(18, 139, 2) 10%,
+    rgb(66, 160, 99) 63.8%,
+    rgb(17, 112, 26) 99.98%
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -195,9 +204,9 @@
   color: transparent;
   background: linear-gradient(
     225deg,
-    rgb(72, 160, 248) 10%,
-    rgb(72, 160, 248) 63.8%,
-    rgb(230, 73, 255) 99.98%
+    rgb(18, 139, 2) 10%,
+    rgb(66, 160, 99) 63.8%,
+    rgb(17, 112, 26) 99.98%
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -223,8 +232,8 @@
 .inputField {
   width: 70%;
   height: 2.3rem;
-  color: #3e2d67;
-  background-color: #eae6ef;
+  color: #000000;
+  background-color: #b8b8b9;
   font-size: 1rem;
   margin: 1rem 0;
   padding-left: 0.5rem;
@@ -235,7 +244,7 @@
 
 .inputField::placeholder {
   font-size: 1rem;
-  color: #443e38;
+  color: #000000;
 }
 
 .inputField::-webkit-inner-spin-button,
@@ -254,14 +263,14 @@
 
 .stakingInfo > p {
   padding: 0.5rem 0;
-  border-bottom: 1px solid rgb(238, 174, 202);
+  border-bottom: 1px solid rgb(0, 0, 0);
 }
 
 .lockedStaking {
   display: flex;
   flex-direction: column;
   padding: 1rem 0 0;
-  border-bottom: 1px solid rgb(238, 174, 202);
+  border-bottom: 1px solid rgb(0, 0, 0);
 }
 
 .stakingDataContainer {
@@ -269,6 +278,8 @@
   justify-content: space-between;
   width: 52rem;
   margin-top: 5rem;
+  font-size: 1.5rem;
+  
 }
 
 .stakingData {
@@ -288,6 +299,9 @@
     rgba(36, 40, 71, 0.1) 0px 1px 15px;
 }
 .stakingData_value {
-  color: #f60606;
+  color: #000000;
   margin-top: 1rem;
+  font-family: lft-etica-mono, ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+    Consolas, "Liberation Mono", monospace;
 }
+

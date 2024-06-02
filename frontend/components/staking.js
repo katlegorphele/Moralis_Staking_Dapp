@@ -161,8 +161,8 @@ export default function Staking() {
               />
               <section className={styles.stakingInfo}>
                 <p>
-                  Balance:{" "}
-                  <span>{(Number(walletBalance) / 10 ** 18).toLocaleString()}</span>
+                  Your Balance:{" "}
+                  <span>{(Number(walletBalance) / 10 ** 18).toLocaleString()}ETH</span>
                 </p>
                 <p>Exchange Rate: 1.03582967</p>
                 {/* <p>Transaction Cost</p> */}
@@ -201,7 +201,7 @@ export default function Staking() {
                 </p>
                 {/* <p>Transaction Cost</p> */}
                 <p>
-                  You Receive: {unstakeValue == 0 ? "" : unstakeValue * 1.07}
+                  You Receive: {unstakeValue == 0 ? "" : unstakeValue * 3.07}
                 </p>
               </section>
               <button

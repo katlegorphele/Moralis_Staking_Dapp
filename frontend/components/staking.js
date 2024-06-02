@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import styles from "../styles/Home.module.css";
-import { useAccount, useContract, useProvider, useSigner } from "wagmi";
+import Web3 from 'web3';
 import { ethers } from "ethers";
 
-import { CONTRACT_ADDRESS, ABI } from "../contracts/index.js";
+const CONTRACT_ADDRESS = "0x43B96E5BA08EA248DDC52b9A060424fA895E8F88";
+const contractData = require("../contracts/Staking.json");
+const ABI = contractData.abi;
 
 export default function Staking() {
-    const { isConnected, address } = useAccount();
-    const provider = useProvider();
-    const { data:signer } = useSigner();
+    const [web3, setWeb3] = useState(null);
+    const [account, setAccount] = useState(null);
+    const [contract, setContract] = useState(null);
 
     const [walletBalance, setWalletBalance] = useState("");
 
@@ -25,30 +26,46 @@ export default function Staking() {
     const toEther = (wei) => ethers.utils.formatEther(wei);
 
     useEffect(() => {
-        async function getWalletBalance() {
-            await axios.get("http://localhost:5001/getwalletbalance",
-            { params: { address }}).then((res) => {
-                setWalletBalance(res.data.balance);
-            });
+        async function initializeWeb3() {
+            if (window.ethereum) {
+                try {
+                    // Request account access if needed
+                    await window.ethereum.enable();
+                    // We don't know window.ethereum exists until we've asked the user
+                    // for permission to access their Ethereum accounts.
+                    const web3Instance = new Web3(window.ethereum);
+                    setWeb3(web3Instance);
+                    const accounts = await web3Instance.eth.getAccounts();
+                    setAccount(accounts[0]);
+                    const contractInstance = new web3Instance.eth.Contract(ABI, CONTRACT_ADDRESS);
+                    setContract(contractInstance);
+                } catch (error) {
+                    console.error("Error creating web3 instance", error);
+                }
+            } else {
+                console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+            }
         }
-        if (isConnected) {
-            getWalletBalance();
-        }
-    }, [isConnected]);
+        initializeWeb3();
+    }, []);
 
-    const contract = useContract({
-        address: CONTRACT_ADDRESS,
-        abi: ABI,
-        signerOrProvider: signer || provider,
-    });
+    useEffect(() => {
+        async function getWalletBalance() {
+            if (account) {
+                const balance = await web3.eth.getBalance(account);
+                setWalletBalance(balance);
+            }
+        }
+        getWalletBalance();
+    }, [account]);
+
 
     const switchToUnstake = async () => {
         if (!unstakingTab) {
             setStakingTab(false);
             setUnstakingTab(true);
-            const assetIds = await getAssetsIds(address, signer);
-            setAssetsIds(assetIds);
-
+            const assetIds = await getAssetsIds(account);
+            setAssetIds(assetIds); 
             getAssets(assetIds,signer);
         }
     };
@@ -61,8 +78,13 @@ export default function Staking() {
     };
 
     const getAssetsIds = async (address) => {
-        const assetIds = await contract.getPositionIdsForAddress(address);
-        return assetIds;
+        if (contract) {
+            const assetIds = await contract.methods.getPositionIdsForAddress(address).call();
+            return assetIds;
+        } else {
+            console.error("Contract is not initialized");
+            return [];
+        }
     };
 
     const calcDaysRemaining = (unlockDate) => {
@@ -72,31 +94,35 @@ export default function Staking() {
     };
 
     const getAssets = async (ids) => {
-            const queriedAssets = await Promise.all(
-                ids.map((id) => contract.getPositionById(id)));
+        const queriedAssets = await Promise.all(
+            ids.map((id) => contract.methods.getPositionById(id).call()));
 
-            queriedAssets.map(async (asset) => {
-                const parsedAsset = {
-                    positionId: asset.positionId,
-                    percentInterest: Number(asset.percentInterest) / 100,
-                    daysRemaining: calcDaysRemaining(Number(asset.unlockDate)),
-                    etherInterest: toEther(asset.weiInterest),
-                    etherStaked: toEther(asset.weiStaked),
-                    open: asset.open,
-                };
-            
-                setAssets((prev) => [...prev, parsedAsset]);
-                });
+        queriedAssets.map(async (asset) => {
+            const parsedAsset = {
+                positionId: asset.positionId,
+                percentInterest: Number(asset.percentInterest) / 100,
+                daysRemaining: calcDaysRemaining(Number(asset.unlockDate)),
+                etherInterest: toEther(asset.weiInterest),
+                etherStaked: toEther(asset.weiStaked),
+                open: asset.open,
+            };
+        
+            setAssets((prev) => [...prev, parsedAsset]);
+            });
     };
 
     const stakeEther = async (stakingLength) => {
-        const wei = toWei(String(amount));
-        const data = { value : wei};
-        await contract.stakeEther(stakingLength,data);
+        if (contract) {
+            const wei = toWei(String(amount));
+            const data = { value : wei};
+            await contract.methods.stakeEther(stakingLength).send(data);
+        } else {
+            console.error("Contract is not initialized");
+        }
     };
 
     const withdraw = (positionId) => {
-        contract.closePosition(positionId);
+        contract.methods.closePosition(positionId).send();
     };
 
     return (
@@ -136,7 +162,7 @@ export default function Staking() {
               <section className={styles.stakingInfo}>
                 <p>
                   Balance:{" "}
-                  <span>{(walletBalance / 10 ** 18).toLocaleString()}</span>
+                  <span>{(Number(walletBalance) / 10 ** 18).toLocaleString()}</span>
                 </p>
                 <p>Exchange Rate: 1.03582967</p>
                 {/* <p>Transaction Cost</p> */}
@@ -179,9 +205,15 @@ export default function Staking() {
                 </p>
               </section>
               <button
-                className={styles.stakeBtn}
-                onClick={() => withdraw(assets[assets.length - 1].positionId)}
-              >
+                    className={styles.stakeBtn}
+                    onClick={() => {
+                        if (assets.length > 0) {
+                            withdraw(assets[assets.length - 1].positionId);
+                        } else {
+                            console.error("No assets to unstake");
+                        }
+                    }}
+                >
                 UNSTAKE
               </button>
             </section>

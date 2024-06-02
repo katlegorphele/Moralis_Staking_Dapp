@@ -62,4 +62,32 @@ contract Staking {
         return (basisPoints * weiAmount) / 10000;
     }
 
+    function getLockPeriods() external view returns(uint[] memory) {
+        return lockPeriods;
+    }
+
+    function getInterestRate(uint numDays) external view returns(uint) {
+        return tiers[numDays];
+    }
+
+    function getPositionById(uint positionId) external view returns(Position memory) {
+        return positions[positionId];
+    }
+
+    function getPositionIdForAddress(address walletAddress) external view returns(uint[] memory) {
+        return positionIdByAddress[walletAddress];
+    }
+
+    function closePosition(uint positionId) external {
+        require(positions[positionId].walletAddress == msg.sender, "You are not the owner of this position");
+        require(positions[positionId].open, "Position is already closed");
+
+        positions[positionId].open = false;
+
+        uint amount = positions[positionId].WeiStaked + positions[positionId].WeiInterest;
+        payable(msg.sender).call{value: amount}("");
+    }
+
+
+
 }

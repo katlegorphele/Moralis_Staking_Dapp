@@ -5,28 +5,31 @@ import { useAccount, useContract, useProvider, useSigner } from "wagmi";
 import { ethers } from "ethers";
 
 import { CONTRACT_ADDRESS, ABI } from "../contracts/index.js";
-import { id } from "ethers/lib/utils.js";
 
 export default function Staking() {
     const { isConnected, address } = useAccount();
     const provider = useProvider();
-    const { data:sogner } = useSigner();
+    const { data:signer } = useSigner();
 
-    const [walletBalance, setWalletBalance] = useState([]);
+    const [walletBalance, setWalletBalance] = useState("");
+
     const [stakingTab, setStakingTab] = useState(true);
     const [unstakingTab, setUnstakingTab] = useState(false);
     const [unstakeValue, setUnstakeValue] = useState(0);
 
+    const [assetIds, setAssetIds] = useState([]);
+    const [assets, setAssets] = useState([]);
+    const [amount, setAmount] = useState(0);
+
     const toWei = (ether) => ethers.utils.parseEther(ether).toString();
-    const fromWei = (wei) => ethers.utils.formatEther(wei);
+    const toEther = (wei) => ethers.utils.formatEther(wei);
 
     useEffect(() => {
         async function getWalletBalance() {
             await axios.get("http://localhost:5001/getwalletbalance",
-            { params: { address: address }}).then((res) => {
+            { params: { address }}).then((res) => {
                 setWalletBalance(res.data.balance);
-            }
-            );
+            });
         }
         if (isConnected) {
             getWalletBalance();
@@ -43,7 +46,7 @@ export default function Staking() {
         if (!unstakingTab) {
             setStakingTab(false);
             setUnstakingTab(true);
-            const assetIds = await getAssetsIds(address. signer);
+            const assetIds = await getAssetsIds(address, signer);
             setAssetsIds(assetIds);
 
             getAssets(assetIds,signer);
@@ -88,12 +91,14 @@ export default function Staking() {
 
     const stakeEther = async (stakingLength) => {
         const wei = toWei(String(amount));
-        const data = { wei: wei};
+        const data = { value : wei};
         await contract.stakeEther(stakingLength,data);
     };
 
     const withdraw = (positionId) => {
         contract.closePosition(positionId);
     };
+
+    
 
 }

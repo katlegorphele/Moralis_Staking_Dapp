@@ -24,7 +24,7 @@ export default function Header() {
             <Beans fontSize="20px" className={styles.beans} />
           </section>
           <section className={styles.header_btn}>
-            {!isLoggedIn ? (
+            {isLoggedIn ? ( // Show the "DISCONNECT WALLET" button when the user is logged in
               <button className={styles.connectBtn} onClick={disconnect}>
                 DISCONNECT WALLET
               </button>
@@ -45,6 +45,4 @@ export default function Header() {
           </section>
         </section>
       );
-
-
 }

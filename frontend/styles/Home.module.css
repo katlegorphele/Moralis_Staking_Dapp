@@ -2,12 +2,12 @@
   font-family: lft-etica-mono, ui-monospace, SFMono-Regular, "SF Mono", Menlo,
     Consolas, "Liberation Mono", monospace;
   min-height: 100vh;
-  background-color: #ffffff;
-  background: rgb(220, 77, 48);
+  background-color: #f7f5f5;
+  background: rgb(52, 47, 47);
   background: radial-gradient(
     circle,
-    rgba(238, 174, 202, 1) 0%,
-    rgba(72, 160, 248, 1) 100%
+    rgb(0, 0, 0) 0%,
+    rgb(247, 247, 247) 100%
   );
 }
 
@@ -19,8 +19,8 @@
   height: 3.5rem;
   background-image: linear-gradient(
     to left,
-    rgba(255, 0, 0, 0),
-    rgb(255, 255, 255)
+    rgba(255, 255, 255, 0),
+    rgb(0, 0, 0)
   );
   color: rgb(25, 15, 15);
   padding: 0 5rem;
@@ -37,9 +37,11 @@
 }
 
 .title {
-  font-size: 1.3rem;
+  font-size: 2rem;
   margin-left: 0.5rem;
   font-weight: 500;
+  color: rgb(255, 255, 255);
+  font-family: "Xirod", sans-serif;
 }
 
 .beans {
@@ -49,7 +51,7 @@
 .connectBtn {
   width: 100%;
   height: 100%;
-  background-color: #48a0f8;
+  background-color: #000000;
   border-radius: 0.3rem;
   border: none;
   outline: none;
@@ -286,6 +288,6 @@
     rgba(36, 40, 71, 0.1) 0px 1px 15px;
 }
 .stakingData_value {
-  color: #3e2d67;
+  color: #f60606;
   margin-top: 1rem;
 }

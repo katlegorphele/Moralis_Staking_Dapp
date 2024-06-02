@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Beans } from "@web3uikit/icons";
+import { NftCat } from "@web3uikit/icons";
 import styles from "../styles/Home.module.css";
 import { Connector, useAccount, useConnect, useDisconnect } from "wagmi";
 
@@ -20,8 +20,9 @@ export default function Header() {
     return (
         <section className={styles.header}>
           <section className={styles.header_logoSection}>
-            <h1 className={styles.title}>Kat Steax </h1>
-            <Beans fontSize="20px" className={styles.beans} />
+            {/* <Beans fontSize="40px" className={styles.beans} /> */}
+              <NftCat fontSize='40px' color='white'/>
+              <h1 className={styles.title}>KAT STEAX </h1>
           </section>
           <section className={styles.header_btn}>
             {isLoggedIn ? ( // Show the "DISCONNECT WALLET" button when the user is logged in

@@ -9,9 +9,10 @@ export default function Home() {
     <section className={styles.main}>
       <Head>
         <title>Kat Steaks</title>
+        <link href="https://fonts.cdnfonts.com/css/xirod" rel="stylesheet" />
       </Head>
       <Header />
-      {/* <Main /> */}
+      <Main />
     </section>
   );
 }

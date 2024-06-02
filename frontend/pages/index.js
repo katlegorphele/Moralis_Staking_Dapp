@@ -11,7 +11,7 @@ export default function Home() {
         <title>Kat Steaks</title>
       </Head>
       <Header />
-      <Main />
+      {/* <Main /> */}
     </section>
   );
 }
